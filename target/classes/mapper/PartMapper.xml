@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.yangao.mapper.PartMapper">
+
+    <resultMap id="BaseResultMap" type="edu.yangao.entity.Part">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="name" column="name" jdbcType="VARCHAR"/>
+        <result property="side" column="side" jdbcType="INTEGER"/>
+        <result property="position" column="position" jdbcType="VARCHAR"/>
+        <result property="threePosition" column="three_position" jdbcType="VARCHAR"/>
+        <result property="description" column="description" jdbcType="VARCHAR"/>
+        <result property="subwayCarriageId" column="subway_carriage_id" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="partBySideResultMap" type="PartBySideDTO">
+        <id property="side" column="side"/>
+        <collection property="parts" ofType="partMajorDTO" />
+    </resultMap>
+
+    <resultMap id="partByCarriageResultMap" type="partByCarriageDTO">
+        <id column="sc_id"/>
+        <association property="subwayCarriage" javaType="subwayCarriageMajorDTO" columnPrefix="sc_"/>
+        <collection property="partsWithFile" ofType="partWithFileInfoDTO" columnPrefix="p_">
+            <association property="part" javaType="partMajorDTO" />
+        </collection>
+    </resultMap>
+
+
+    <sql id="Base_Column_List">
+        id
+        ,name,side,
+        position,three_position,description,
+        subway_carriage_id,create_time,update_time,
+        deleted
+    </sql>
+    <select id="selectAllBySubwayCarriageId" resultMap="partBySideResultMap">
+        select id, `name`, side, position, three_position, `description`, subway_carriage_id
+        from part
+        where subway_carriage_id = #{subwayCarriageId,jdbcType=NUMERIC}
+          and deleted = 0
+    </select>
+    <select id="selectAllBySubwayCleanHistoryId" resultMap="partByCarriageResultMap">
+        select sc.id sc_id, sc.name sc_name, sc.num sc_num, sc.subway_type_id sc_subway_type_id, p.id p_id, p.name p_name, p.side p_side, p.position p_position, p.three_position p_three_position, p.description p_description
+        from part_clean_history pch
+            join part p on pch.part_id = p.id
+            join subway_carriage sc on sc.id = p.subway_carriage_id
+        where pch.clean_history_id = #{subwayCleanHistoryId}
+          and pch.deleted = 0
+    </select>
+</mapper>

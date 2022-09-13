@@ -1,0 +1,102 @@
+{
+  "groups": [
+    {
+      "name": "modbus",
+      "type": "edu.yangao.util.ModbusUtil",
+      "sourceType": "edu.yangao.util.ModbusUtil"
+    },
+    {
+      "name": "open-api",
+      "type": "io.swagger.v3.oas.models.OpenAPI",
+      "sourceType": "edu.yangao.config.SwaggerConfig",
+      "sourceMethod": "openApi()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "modbus.ip",
+      "type": "java.lang.String",
+      "description": "地址 默认本地",
+      "sourceType": "edu.yangao.util.ModbusUtil"
+    },
+    {
+      "name": "modbus.master",
+      "type": "com.serotonin.modbus4j.ModbusMaster",
+      "description": "从机连接",
+      "sourceType": "edu.yangao.util.ModbusUtil"
+    },
+    {
+      "name": "modbus.port",
+      "type": "java.lang.Integer",
+      "description": "端口 默认502",
+      "sourceType": "edu.yangao.util.ModbusUtil"
+    },
+    {
+      "name": "modbus.slave-id",
+      "type": "java.lang.Integer",
+      "description": "从机id 默认1",
+      "sourceType": "edu.yangao.util.ModbusUtil"
+    },
+    {
+      "name": "open-api.components",
+      "type": "io.swagger.v3.oas.models.Components",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.extensions",
+      "type": "java.util.Map<java.lang.String,java.lang.Object>",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.external-docs",
+      "type": "io.swagger.v3.oas.models.ExternalDocumentation",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.info",
+      "type": "io.swagger.v3.oas.models.info.Info",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.json-schema-dialect",
+      "type": "java.lang.String",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.openapi",
+      "type": "java.lang.String",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.paths",
+      "type": "io.swagger.v3.oas.models.Paths",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.security",
+      "type": "java.util.List<io.swagger.v3.oas.models.security.SecurityRequirement>",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.servers",
+      "type": "java.util.List<io.swagger.v3.oas.models.servers.Server>",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.spec-version",
+      "type": "io.swagger.v3.oas.models.SpecVersion",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.tags",
+      "type": "java.util.List<io.swagger.v3.oas.models.tags.Tag>",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    },
+    {
+      "name": "open-api.webhooks",
+      "type": "java.util.Map<java.lang.String,io.swagger.v3.oas.models.PathItem>",
+      "sourceType": "io.swagger.v3.oas.models.OpenAPI"
+    }
+  ],
+  "hints": []
+}
