@@ -1,6 +1,9 @@
 package edu.yangao.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import edu.yangao.entity.dto.SubwayCleanAndPartCleanHistorySaveDTO;
+import edu.yangao.entity.dto.SubwayCleanHistoryFindConditionDTO;
+import edu.yangao.entity.vo.SubwayCleanHistoryWithPartAndSubwayInfoVO;
 import edu.yangao.service.SubwayCleanHistoryService;
 import edu.yangao.util.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,6 +32,17 @@ public class SubwayCleanHistoryController {
     @Operation(summary = "添加地铁清理记录和对应的零件清理记录")
     public Result<Integer> saveSubwayCleanAndPartCleanHistory(@RequestBody @Validated SubwayCleanAndPartCleanHistorySaveDTO subwayCleanAndPartCleanHistorySaveDTO) {
         return Result.success(subwayCleanHistoryService.saveSubwayCleanAndPartCleanHistory(subwayCleanAndPartCleanHistorySaveDTO));
+    }
+
+    /**
+     * 根据条件进行清理记录及其清理零件信息
+     * @param conditionDTO 条件信息(地铁名称、
+     * @return 查询出来的结果
+     */
+    @PostMapping("/subway-clean-history/subway/parts")
+    @Operation(summary = "根据条件进行清理记录及其清理零件信息")
+    public Result<IPage<SubwayCleanHistoryWithPartAndSubwayInfoVO>> selectAllWithSubwayAndPartsByCondition(@RequestBody @Validated SubwayCleanHistoryFindConditionDTO conditionDTO) {
+        return Result.success(subwayCleanHistoryService.selectAllWithSubwayAndPartsByCondition(conditionDTO));
     }
 
     @Autowired

@@ -1,8 +1,11 @@
 package edu.yangao.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import edu.yangao.entity.SubwayCleanHistory;
 import edu.yangao.entity.dto.SubwayCleanAndPartCleanHistorySaveDTO;
+import edu.yangao.entity.dto.SubwayCleanHistoryFindConditionDTO;
+import edu.yangao.entity.vo.SubwayCleanHistoryWithPartAndSubwayInfoVO;
 
 /**
 * @author YangAo
@@ -18,5 +21,12 @@ public interface SubwayCleanHistoryService extends IService<SubwayCleanHistory> 
      * @return 添加的地铁记录的id
      */
     Integer saveSubwayCleanAndPartCleanHistory(SubwayCleanAndPartCleanHistorySaveDTO subwayCleanAndPartCleanHistorySaveDTO);
+
+    /**
+     * 根据条件(分页)进行清理记录及其清洗的零件信息
+     * @param conditionDTO 查询条件
+     * @return 分页后的列表信息
+     */
+    IPage<SubwayCleanHistoryWithPartAndSubwayInfoVO> selectAllWithSubwayAndPartsByCondition(SubwayCleanHistoryFindConditionDTO conditionDTO);
 
 }

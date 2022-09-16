@@ -19,4 +19,10 @@
         clean_history_id,create_time,end_time,
         deleted
     </sql>
+    <select id="selectPartsBySubwayCleanHistoryId" resultType="partMajorDTO">
+        select p.id, p.name, p.side, p.position, p.three_position, p.description, p.subway_carriage_id
+            from part_clean_history pch
+            join part p on p.id = pch.part_id
+        where pch.clean_history_id = #{subwayCleanHistoryId}
+    </select>
 </mapper>

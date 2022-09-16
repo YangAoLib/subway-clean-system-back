@@ -1,5 +1,7 @@
 package edu.yangao.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import edu.yangao.entity.Part;
@@ -7,6 +9,8 @@ import edu.yangao.entity.PartCleanHistory;
 import edu.yangao.entity.Subway;
 import edu.yangao.entity.SubwayCleanHistory;
 import edu.yangao.entity.dto.SubwayCleanAndPartCleanHistorySaveDTO;
+import edu.yangao.entity.dto.SubwayCleanHistoryFindConditionDTO;
+import edu.yangao.entity.vo.SubwayCleanHistoryWithPartAndSubwayInfoVO;
 import edu.yangao.mapper.PartMapper;
 import edu.yangao.mapper.SubwayCleanHistoryMapper;
 import edu.yangao.mapper.SubwayMapper;
@@ -19,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -61,6 +66,25 @@ public class SubwayCleanHistoryServiceImpl extends ServiceImpl<SubwayCleanHistor
         partCleanHistoryService.saveBatch(partIdList.stream().map(partId -> PartCleanHistory.builder().partId(partId).cleanHistoryId(subwayCleanHistoryId).build()).collect(Collectors.toList()));
         return subwayCleanHistoryId;
     }
+
+    @Override
+    public IPage<SubwayCleanHistoryWithPartAndSubwayInfoVO> selectAllWithSubwayAndPartsByCondition(SubwayCleanHistoryFindConditionDTO conditionDTO) {
+        Integer currentPage = conditionDTO.getCurrentPage();
+        Integer pageSize = conditionDTO.getPageSize();
+        // 数据校验
+        if (currentPage == null || currentPage <= 0 || pageSize == null || pageSize <= 0) {
+            throw new CustomServiceException("分页参数错误", ResultCode.PARAM_IS_INVALID);
+        }
+        Date timeStart = conditionDTO.getCreateTimeStart();
+        Date timeEnd = conditionDTO.getCreateTimeEnd();
+        if ((timeStart != null || timeEnd != null) && timeEnd.getTime() >= timeEnd.getTime()) {
+            throw new CustomServiceException("时间参数错误", ResultCode.PARAM_IS_INVALID);
+        }
+        //执行查找
+        Page<SubwayCleanHistoryWithPartAndSubwayInfoVO> page = new Page<>(currentPage, pageSize);
+        return baseMapper.selectAllWithSubwayAndPartsByCondition(page, conditionDTO);
+    }
+
 
     @Autowired
     private SubwayMapper subwayMapper;
