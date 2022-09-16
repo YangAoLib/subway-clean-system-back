@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import edu.yangao.entity.SubwayCleanHistory;
 import edu.yangao.entity.dto.SubwayCleanAndPartCleanHistorySaveDTO;
 import edu.yangao.entity.dto.SubwayCleanHistoryFindConditionDTO;
+import edu.yangao.entity.dto.SubwayCleanHistoryUpdateStatusDTO;
 import edu.yangao.entity.vo.SubwayCleanHistoryWithPartAndSubwayInfoVO;
 import edu.yangao.entity.vo.SubwayCleanHistoryWithPartGroupByCarriageVO;
 
@@ -36,5 +37,12 @@ public interface SubwayCleanHistoryService extends IService<SubwayCleanHistory> 
      * @return 包含地铁清理记录的基础信息(subwayCleanHistory) 和 零件信息
      */
     SubwayCleanHistoryWithPartGroupByCarriageVO selectAllWithPartsGroupByCarriageByCleanHistoryId(Integer subwayCleanHistoryId);
+
+    /**
+     * 更新地铁清理记录的状态(进度 状态随进度更新)
+     * @param updateStatusDTO 要更新的信息(id, progress)
+     * @return 更新情况
+     */
+    Boolean updateSubwayCleanHistoryStatus(SubwayCleanHistoryUpdateStatusDTO updateStatusDTO);
 
 }

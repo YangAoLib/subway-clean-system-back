@@ -11,6 +11,8 @@ import edu.yangao.entity.SubwayCleanHistory;
 import edu.yangao.entity.dto.SubwayCleanAndPartCleanHistorySaveDTO;
 import edu.yangao.entity.dto.SubwayCleanHistoryFindConditionDTO;
 import edu.yangao.entity.dto.SubwayCleanHistoryMajorDTO;
+import edu.yangao.entity.dto.SubwayCleanHistoryUpdateStatusDTO;
+import edu.yangao.entity.enums.CleanStateEnum;
 import edu.yangao.entity.vo.SubwayCleanHistoryWithPartAndSubwayInfoVO;
 import edu.yangao.entity.vo.SubwayCleanHistoryWithPartGroupByCarriageVO;
 import edu.yangao.mapper.PartMapper;
@@ -93,6 +95,28 @@ public class SubwayCleanHistoryServiceImpl extends ServiceImpl<SubwayCleanHistor
         return SubwayCleanHistoryWithPartGroupByCarriageVO.builder().subwayCleanHistory(BeanUtil.copyBean(baseMapper.selectById(subwayCleanHistoryId), SubwayCleanHistoryMajorDTO.class)).parts(partMapper.selectAllBySubwayCleanHistoryId(subwayCleanHistoryId)).build();
     }
 
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateSubwayCleanHistoryStatus(SubwayCleanHistoryUpdateStatusDTO updateStatusDTO) {
+        // 参数校验
+        // 校验id是否正确
+        if (Objects.isNull(baseMapper.selectById(updateStatusDTO.getId()))) {
+            throw new CustomServiceException("该清理记录不存在, 请检查参数", ResultCode.PARAM_IS_INVALID);
+        }
+        // 校验进度参数
+        Integer progress = updateStatusDTO.getCleanProgress();
+        if (progress < 0 || progress > 100) {
+            throw new CustomServiceException("进度参数错误", ResultCode.PARAM_IS_INVALID);
+        }
+        // 进度与状态调整
+        if (progress == 100) {
+            updateStatusDTO.setStatus(CleanStateEnum.COMPLETE);
+        } else if (progress == 0) {
+            updateStatusDTO.setStatus(CleanStateEnum.NOT_STARTED);
+        }
+        // 执行更新操作
+        return updateById(BeanUtil.copyBean(updateStatusDTO, SubwayCleanHistory.class));
+    }
 
     @Autowired
     private SubwayMapper subwayMapper;
