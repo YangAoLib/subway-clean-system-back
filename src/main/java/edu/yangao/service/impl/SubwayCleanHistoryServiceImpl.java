@@ -10,12 +10,15 @@ import edu.yangao.entity.Subway;
 import edu.yangao.entity.SubwayCleanHistory;
 import edu.yangao.entity.dto.SubwayCleanAndPartCleanHistorySaveDTO;
 import edu.yangao.entity.dto.SubwayCleanHistoryFindConditionDTO;
+import edu.yangao.entity.dto.SubwayCleanHistoryMajorDTO;
 import edu.yangao.entity.vo.SubwayCleanHistoryWithPartAndSubwayInfoVO;
+import edu.yangao.entity.vo.SubwayCleanHistoryWithPartGroupByCarriageVO;
 import edu.yangao.mapper.PartMapper;
 import edu.yangao.mapper.SubwayCleanHistoryMapper;
 import edu.yangao.mapper.SubwayMapper;
 import edu.yangao.service.PartCleanHistoryService;
 import edu.yangao.service.SubwayCleanHistoryService;
+import edu.yangao.util.BeanUtil;
 import edu.yangao.util.CustomServiceException;
 import edu.yangao.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +86,11 @@ public class SubwayCleanHistoryServiceImpl extends ServiceImpl<SubwayCleanHistor
         //执行查找
         Page<SubwayCleanHistoryWithPartAndSubwayInfoVO> page = new Page<>(currentPage, pageSize);
         return baseMapper.selectAllWithSubwayAndPartsByCondition(page, conditionDTO);
+    }
+
+    @Override
+    public SubwayCleanHistoryWithPartGroupByCarriageVO selectAllWithPartsGroupByCarriageByCleanHistoryId(Integer subwayCleanHistoryId) {
+        return SubwayCleanHistoryWithPartGroupByCarriageVO.builder().subwayCleanHistory(BeanUtil.copyBean(baseMapper.selectById(subwayCleanHistoryId), SubwayCleanHistoryMajorDTO.class)).parts(partMapper.selectAllBySubwayCleanHistoryId(subwayCleanHistoryId)).build();
     }
 
 

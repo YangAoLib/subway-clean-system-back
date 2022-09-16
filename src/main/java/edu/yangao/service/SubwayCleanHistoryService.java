@@ -6,6 +6,7 @@ import edu.yangao.entity.SubwayCleanHistory;
 import edu.yangao.entity.dto.SubwayCleanAndPartCleanHistorySaveDTO;
 import edu.yangao.entity.dto.SubwayCleanHistoryFindConditionDTO;
 import edu.yangao.entity.vo.SubwayCleanHistoryWithPartAndSubwayInfoVO;
+import edu.yangao.entity.vo.SubwayCleanHistoryWithPartGroupByCarriageVO;
 
 /**
 * @author YangAo
@@ -28,5 +29,12 @@ public interface SubwayCleanHistoryService extends IService<SubwayCleanHistory> 
      * @return 分页后的列表信息
      */
     IPage<SubwayCleanHistoryWithPartAndSubwayInfoVO> selectAllWithSubwayAndPartsByCondition(SubwayCleanHistoryFindConditionDTO conditionDTO);
+
+    /**
+     * 根据 地铁清理记录id 进行基础信息与其相关零件(根据车厢进行分组)的查找
+     * @param subwayCleanHistoryId 地铁清理记录id
+     * @return 包含地铁清理记录的基础信息(subwayCleanHistory) 和 零件信息
+     */
+    SubwayCleanHistoryWithPartGroupByCarriageVO selectAllWithPartsGroupByCarriageByCleanHistoryId(Integer subwayCleanHistoryId);
 
 }

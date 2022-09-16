@@ -1,5 +1,6 @@
 package edu.yangao.entity.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.yangao.entity.dto.PartMajorDTO;
 import edu.yangao.entity.dto.SubwayCleanHistoryMajorDTO;
 import edu.yangao.entity.dto.SubwayMajorDTO;
@@ -20,6 +21,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "地铁清理记录和零件信息 ")
 public class SubwayCleanHistoryWithPartAndSubwayInfoVO {
 
