@@ -22,7 +22,6 @@ public interface PartCleanHistoryMapper extends BaseMapper<PartCleanHistory> {
      * @return 零件信息列表
      */
     List<PartMajorDTO> selectPartsBySubwayCleanHistoryId(Integer subwayCleanHistoryId);
-
 }
 
 
