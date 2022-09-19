@@ -1,14 +1,32 @@
 server:
   port: 9090
+  # TODO: 设置 Tomcat 最大单次请求大小
+  tomcat:
+    max-http-form-post-size: 200MB
+  # TODO: 设置 undertow 最大单次请求大小
+  undertow:
+    max-http-post-size: 200MB
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    # todo: 修改数据库信息
+    # TODO: 修改数据库信息 (url、username、password)
     url: jdbc:mysql://localhost:3306/subway_clean?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai&useSSL=false
     username: yangao
     password: nswdfq
   profiles:
-    active: default
+    active: dev
+  redis:
+    # TODO: 修改 redis 配置信息 (password、host、port)
+    password: nswdfq
+    host: localhost
+    port: 6379
+    client-type: lettuce
+  servlet:
+    multipart:
+      # TODO: 设置单个文件最大大小
+      max-file-size: 200MB
+      # TODO: 设置单次请求最大大小
+      max-request-size: 200MB
 # swagger 配置
 open-api:
   # 文档信息
@@ -53,12 +71,18 @@ mybatis-plus:
       logic-delete-field: deleted
 # modbus 配置
 modbus:
+  # TODO: 地址与端口信息修改 (ip、port)
   # 从机地址
   ip: test.gamehu4399.top
   # 端口
   port: 48535
   # 从机id
   slave-id: 1
+# 文件工具配置
+file-util:
+  # TODO: 文件存储位置
+  storage-path: /home/root/file/
+  redis-dir: file
 
 ---
 spring:
@@ -66,6 +90,20 @@ spring:
     activate:
       # 多环境配置
       on-profile: dev
+  redis:
+    password: nswdfq
+    host: localhost
+    port: 6379
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
+server:
+  port: 9090
+  tomcat:
+    max-http-form-post-size: -1
+  undertow:
+    max-http-post-size: -1
 # modbus 配置
 modbus:
   # 从机地址
@@ -74,3 +112,6 @@ modbus:
   port: 502
   # 从机id
   slave-id: 1
+# 文件工具配置
+file-util:
+  storage-path: C:/software/upload-file/

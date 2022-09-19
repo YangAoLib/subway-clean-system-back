@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -46,6 +47,11 @@ public class FileUtil {
         String originName = multipartFile.getOriginalFilename();
         String currentName = UUID.randomUUID().toString().replaceAll("-", "") + "-" + originName;
         Path path = Path.of(storagePath, currentName);
+        File parentDir = path.getParent().toFile();
+        // 前置路径不存在 并且 无法创建
+        if (!parentDir.exists() && !parentDir.mkdirs()) {
+            throw new IOException("前置路径创建失败, 请自行创建或赋予权限");
+        }
         // 进行存储操作
         multipartFile.transferTo(path);
         // 正常存储后返回信息
