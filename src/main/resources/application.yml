@@ -20,7 +20,6 @@ spring:
     password: nswdfq
     host: localhost
     port: 6379
-    client-type: lettuce
   servlet:
     multipart:
       # TODO: 设置单个文件最大大小

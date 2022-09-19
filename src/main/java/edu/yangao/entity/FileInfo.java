@@ -5,8 +5,10 @@ import edu.yangao.entity.enums.DeletedEnum;
 import edu.yangao.entity.enums.FileTypeEnum;
 import edu.yangao.entity.enums.ObjTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
@@ -23,6 +25,8 @@ import java.util.Date;
 @TableName(value ="file_info")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "文件存储信息")
 public class FileInfo implements Serializable {
     /**

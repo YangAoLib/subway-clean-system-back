@@ -24,4 +24,6 @@ public interface SubwayService extends IService<Subway> {
      * @return 地铁信息、地铁类型、地铁车厢及对应文件信息
      */
     SubwayWithTypeAndCarriageInfoVO getSubwayInfoAndTypeAndCarriage(Integer subwayId);
+
+
 }

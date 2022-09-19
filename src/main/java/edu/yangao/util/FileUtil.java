@@ -45,7 +45,8 @@ public class FileUtil {
     public FileInfo uploadFile(MultipartFile multipartFile) throws IOException {
         // 生成存储信息
         String originName = multipartFile.getOriginalFilename();
-        String currentName = UUID.randomUUID().toString().replaceAll("-", "") + "-" + originName;
+        String generatedName = UUID.randomUUID().toString().replaceAll("-", "") + "-" + originName;
+        String currentName = Path.of(generatedName).toString();
         Path path = Path.of(storagePath, currentName);
         File parentDir = path.getParent().toFile();
         // 前置路径不存在 并且 无法创建
@@ -71,5 +72,29 @@ public class FileUtil {
             infos.add(uploadFile(file));
         }
         return infos;
+    }
+
+    /**
+     * 删除文件
+     * @param path 相对路径
+     * @return 是否删除成功
+     * @exception IOException 文件不存在异常
+     */
+    public boolean deleteFile(String path) throws IOException {
+        File file = Path.of(storagePath, path).toFile();
+        if (!file.exists()) {
+            throw new IOException("对应文件不存在, 请检查路径");
+        }
+        return file.delete();
+    }
+
+    /**
+     * 删除文件
+     * @param fileInfo 文件信息
+     * @return 是否删除成功
+     * @throws IOException 文件不存在异常
+     */
+    public boolean deleteFile(FileInfo fileInfo) throws IOException {
+        return deleteFile(fileInfo.getCurrentName());
     }
 }

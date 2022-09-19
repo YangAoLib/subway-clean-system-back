@@ -65,6 +65,7 @@ public class SubwayCleanHistoryController {
      * @return 更新状态
      */
     @PostMapping("/subway-clean-history/update/progress")
+    @Operation(summary = "根据id进行地铁清理进度和状态的更新")
     public Result<Boolean> updateSubwayCleanHistoryStatus(@RequestBody @Validated  SubwayCleanHistoryUpdateStatusDTO updateStatusDTO) {
         return Result.success(subwayCleanHistoryService.updateSubwayCleanHistoryStatus(updateStatusDTO));
     }

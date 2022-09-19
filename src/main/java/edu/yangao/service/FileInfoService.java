@@ -1,9 +1,10 @@
 package edu.yangao.service;
 
-import edu.yangao.entity.FileInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import edu.yangao.entity.FileInfo;
 import edu.yangao.entity.enums.FileTypeEnum;
 import edu.yangao.entity.enums.ObjTypeEnum;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -25,4 +26,11 @@ public interface FileInfoService extends IService<FileInfo> {
      * @return 类型与文件列表相对应的Map
      */
     <T> Map<FileTypeEnum, List<T>> getAllTypesOfFilesByObjIdAndObjType(Integer objId, ObjTypeEnum objType, Class<T> target);
+
+    /**
+     * 上传存储文件, 并将其基础信息存入redis
+     * @param file 文件
+     * @return redis中对应的key
+     */
+    String uploadFile(MultipartFile file);
 }
