@@ -25,12 +25,38 @@
         create_time,update_time,deleted
     </sql>
     <select id="selectSubWayAndTypeAndCarriage" resultMap="subwayWithTypeAndCarriageInfoVOResultMap">
-        select s.id, s.name, s.subway_type_id, st.id st_id, st.name st_name, sc.id sc_id, sc.name sc_name, sc.num sc_num, sc.subway_type_id sc_subway_type_id
+        select s.id,
+               s.name,
+               s.subway_type_id,
+               st.id             st_id,
+               st.name           st_name,
+               sc.id             sc_id,
+               sc.name           sc_name,
+               sc.num            sc_num,
+               sc.subway_type_id sc_subway_type_id
         from subway s
                  join subway_type st on s.subway_type_id = st.id
                  join subway_carriage sc on st.id = sc.subway_type_id
         where s.id = #{id}
-          and s.deleted = 0 and st.deleted = 0 and sc.deleted = 0
+          and s.deleted = 0
+          and st.deleted = 0
+          and sc.deleted = 0
 
+    </select>
+    <select id="selectSubwayWithTypeNameByCondition" resultType="subwayWithTypeInfoVO">
+        select s.id, s.name, s.create_time, st.name subway_type_name
+        from subway s
+        join subway_type st on s.subway_type_id = st.id
+        <where>
+            <if test="condition.name != null and !condition.name.isBlank()">
+                and s.name like concat('%', #{condition.name}, '%')
+            </if>
+            <if test="condition.createTimeStart != null and condition.createTimeEnd != null and condition.createTimeEnd >= condition.createTimeStart">
+                and s.create_time between #{condition.createTimeStart} and #{condition.createTimeEnd}
+            </if>
+            <if test="condition.subwayTypeName != null and !condition.subwayTypeName.isBlank()">
+                and st.name like concat('%', #{condition.subwayTypeName}, '%')
+            </if>
+        </where>
     </select>
 </mapper>

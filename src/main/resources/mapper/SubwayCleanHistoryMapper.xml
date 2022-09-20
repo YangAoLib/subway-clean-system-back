@@ -47,7 +47,7 @@
                 <if test="condition.createTimeStart != null and condition.createTimeEnd != null and condition.createTimeStart &lt; condition.createTimeEnd">
                     and sch.create_time between #{condition.createTimeStart} and #{condition.createTimeEnd}
                 </if>
-                <if test="condition.subwayName != null and condition.subwayName.isBlank()">
+                <if test="condition.subwayName != null and !condition.subwayName.isBlank()">
                     and s.name = #{condition.subwayName}
                 </if>
                 and sch.deleted = 0

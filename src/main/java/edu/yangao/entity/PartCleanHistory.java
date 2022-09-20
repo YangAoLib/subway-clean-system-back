@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.annotation.*;
 import edu.yangao.entity.enums.CleanStateEnum;
 import edu.yangao.entity.enums.DeletedEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -21,6 +23,8 @@ import java.util.Date;
 @TableName(value = "part_clean_history")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "零件清理历史记录")
 public class PartCleanHistory implements Serializable {
     /**

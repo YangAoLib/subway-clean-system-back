@@ -3,8 +3,10 @@ package edu.yangao.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import edu.yangao.entity.enums.DeletedEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
@@ -22,6 +24,8 @@ import java.util.Date;
 @TableName(value = "subway")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "地铁信息数据")
 public class Subway implements Serializable {
     /**
