@@ -22,13 +22,17 @@ public class GlobalExceptionHandler {
 
     /**
      * 处理全局自定义业务异常, 返回异常中的错误信息以及基本错误信息
-     * @param exception 自定义业务异常
+     * @param customServiceException 自定义业务异常
      * @return 错误请求, 统一返回信息
      */
     @ExceptionHandler({CustomServiceException.class})
-    public Result<String> customServiceExceptionHandler(CustomServiceException exception) {
-        logger.error("业务异常", exception);
-        return Result.fail(exception);
+    public Result<String> customServiceExceptionHandler(CustomServiceException customServiceException) {
+        logger.error("业务异常", customServiceException);
+        for (Exception e :
+                customServiceException.getExceptions()) {
+            logger.error("携带异常", e);
+        }
+        return Result.fail(customServiceException);
     }
 
     /**

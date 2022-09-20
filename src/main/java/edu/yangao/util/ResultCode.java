@@ -45,7 +45,11 @@ public enum ResultCode implements BaseErrorInfoInterface {
     /**
      * 数据库错误
      */
-    DATABASE_ERROR(5000, "数据库错误");
+    DATABASE_ERROR(5000, "数据库错误"),
+    /**
+     * 文件上传错误
+     */
+    FILE_UPLOAD_ERROR(6001, "文件上传错误");
     private final Integer status;
     private final String message;
 

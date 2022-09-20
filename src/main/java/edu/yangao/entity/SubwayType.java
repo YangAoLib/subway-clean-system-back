@@ -2,8 +2,10 @@ package edu.yangao.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
@@ -20,6 +22,8 @@ import java.util.Date;
 @TableName(value = "subway_type")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "地铁类型")
 public class SubwayType implements Serializable {
     /**

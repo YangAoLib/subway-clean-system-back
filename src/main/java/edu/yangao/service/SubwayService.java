@@ -1,8 +1,12 @@
 package edu.yangao.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import edu.yangao.entity.Subway;
 import com.baomidou.mybatisplus.extension.service.IService;
+import edu.yangao.entity.dto.SubwayFindConditionDTO;
+import edu.yangao.entity.dto.SubwayMajorDTO;
 import edu.yangao.entity.vo.SubwayWithTypeAndCarriageInfoVO;
+import edu.yangao.entity.vo.SubwayWithTypeInfoVO;
 
 /**
 * @author YangAo
@@ -24,4 +28,18 @@ public interface SubwayService extends IService<Subway> {
      * @return 地铁信息、地铁类型、地铁车厢及对应文件信息
      */
     SubwayWithTypeAndCarriageInfoVO getSubwayInfoAndTypeAndCarriage(Integer subwayId);
+
+    /**
+     * 添加地铁车辆信息
+     * @param subwayMajorDTO 地铁基础信息
+     * @return 添加情况
+     */
+    Boolean saveSubway(SubwayMajorDTO subwayMajorDTO);
+
+    /**
+     * 根据条件 按分页进行 地铁信息的查找
+     * @param conditionDTO 查询条件
+     * @return 分页后的数据
+     */
+    IPage<SubwayWithTypeInfoVO> selectSubwayWithTypeInfo(SubwayFindConditionDTO conditionDTO);
 }

@@ -1,5 +1,7 @@
 package edu.yangao.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import edu.yangao.entity.Part;
@@ -7,11 +9,18 @@ import edu.yangao.entity.PartCleanHistory;
 import edu.yangao.entity.Subway;
 import edu.yangao.entity.SubwayCleanHistory;
 import edu.yangao.entity.dto.SubwayCleanAndPartCleanHistorySaveDTO;
+import edu.yangao.entity.dto.SubwayCleanHistoryFindConditionDTO;
+import edu.yangao.entity.dto.SubwayCleanHistoryMajorDTO;
+import edu.yangao.entity.dto.SubwayCleanHistoryUpdateStatusDTO;
+import edu.yangao.entity.enums.CleanStateEnum;
+import edu.yangao.entity.vo.SubwayCleanHistoryWithPartAndSubwayInfoVO;
+import edu.yangao.entity.vo.SubwayCleanHistoryWithPartGroupByCarriageVO;
 import edu.yangao.mapper.PartMapper;
 import edu.yangao.mapper.SubwayCleanHistoryMapper;
 import edu.yangao.mapper.SubwayMapper;
 import edu.yangao.service.PartCleanHistoryService;
 import edu.yangao.service.SubwayCleanHistoryService;
+import edu.yangao.util.BeanUtil;
 import edu.yangao.util.CustomServiceException;
 import edu.yangao.util.ResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -60,6 +70,52 @@ public class SubwayCleanHistoryServiceImpl extends ServiceImpl<SubwayCleanHistor
         // 插入 零件清理记录
         partCleanHistoryService.saveBatch(partIdList.stream().map(partId -> PartCleanHistory.builder().partId(partId).cleanHistoryId(subwayCleanHistoryId).build()).collect(Collectors.toList()));
         return subwayCleanHistoryId;
+    }
+
+    @Override
+    public IPage<SubwayCleanHistoryWithPartAndSubwayInfoVO> selectAllWithSubwayAndPartsByCondition(SubwayCleanHistoryFindConditionDTO conditionDTO) {
+        Integer currentPage = conditionDTO.getCurrentPage();
+        Integer pageSize = conditionDTO.getPageSize();
+        // 数据校验
+        if (currentPage == null || currentPage <= 0 || pageSize == null || pageSize <= 0) {
+            throw new CustomServiceException("分页参数错误", ResultCode.PARAM_IS_INVALID);
+        }
+        Date timeStart = conditionDTO.getCreateTimeStart();
+        Date timeEnd = conditionDTO.getCreateTimeEnd();
+        if ((timeStart != null || timeEnd != null) && timeEnd.getTime() >= timeEnd.getTime()) {
+            throw new CustomServiceException("时间参数错误", ResultCode.PARAM_IS_INVALID);
+        }
+        //执行查找
+        Page<SubwayCleanHistoryWithPartAndSubwayInfoVO> page = new Page<>(currentPage, pageSize);
+        return baseMapper.selectAllWithSubwayAndPartsByCondition(page, conditionDTO);
+    }
+
+    @Override
+    public SubwayCleanHistoryWithPartGroupByCarriageVO selectAllWithPartsGroupByCarriageByCleanHistoryId(Integer subwayCleanHistoryId) {
+        return SubwayCleanHistoryWithPartGroupByCarriageVO.builder().subwayCleanHistory(BeanUtil.copyBean(baseMapper.selectById(subwayCleanHistoryId), SubwayCleanHistoryMajorDTO.class)).parts(partMapper.selectAllBySubwayCleanHistoryId(subwayCleanHistoryId)).build();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean updateSubwayCleanHistoryStatus(SubwayCleanHistoryUpdateStatusDTO updateStatusDTO) {
+        // 参数校验
+        // 校验id是否正确
+        if (Objects.isNull(baseMapper.selectById(updateStatusDTO.getId()))) {
+            throw new CustomServiceException("该清理记录不存在, 请检查参数", ResultCode.PARAM_IS_INVALID);
+        }
+        // 校验进度参数
+        Integer progress = updateStatusDTO.getCleanProgress();
+        if (progress < 0 || progress > 100) {
+            throw new CustomServiceException("进度参数错误", ResultCode.PARAM_IS_INVALID);
+        }
+        // 进度与状态调整
+        if (progress == 100) {
+            updateStatusDTO.setStatus(CleanStateEnum.COMPLETE);
+        } else if (progress == 0) {
+            updateStatusDTO.setStatus(CleanStateEnum.NOT_STARTED);
+        }
+        // 执行更新操作
+        return updateById(BeanUtil.copyBean(updateStatusDTO, SubwayCleanHistory.class));
     }
 
     @Autowired

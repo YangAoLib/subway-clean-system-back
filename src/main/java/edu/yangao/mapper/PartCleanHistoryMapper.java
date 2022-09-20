@@ -1,8 +1,11 @@
 package edu.yangao.mapper;
 
-import edu.yangao.entity.PartCleanHistory;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import edu.yangao.entity.PartCleanHistory;
+import edu.yangao.entity.dto.PartMajorDTO;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
 * @author YangAo
@@ -13,6 +16,12 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PartCleanHistoryMapper extends BaseMapper<PartCleanHistory> {
 
+    /**
+     * 根据地铁清理记录id, 查询其包含清理的零件
+     * @param subwayCleanHistoryId 地铁清理记录id
+     * @return 零件信息列表
+     */
+    List<PartMajorDTO> selectPartsBySubwayCleanHistoryId(Integer subwayCleanHistoryId);
 }
 
 

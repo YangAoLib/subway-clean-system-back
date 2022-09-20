@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.annotation.*;
 import edu.yangao.entity.enums.DeletedEnum;
 import edu.yangao.entity.enums.SideEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Min;
@@ -24,6 +26,8 @@ import java.util.Date;
 @TableName(value = "part")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "零件信息")
 public class Part implements Serializable {
     /**

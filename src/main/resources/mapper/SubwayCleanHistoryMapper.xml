@@ -5,19 +5,53 @@
 <mapper namespace="edu.yangao.mapper.SubwayCleanHistoryMapper">
 
     <resultMap id="BaseResultMap" type="edu.yangao.entity.SubwayCleanHistory">
-            <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="subwayId" column="subway_id" jdbcType="INTEGER"/>
-            <result property="status" column="status" jdbcType="INTEGER"/>
-            <result property="cleanProgress" column="clean_progress" jdbcType="INTEGER"/>
-            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
-            <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
-            <result property="deleted" column="deleted" jdbcType="INTEGER"/>
-            <result property="handler" column="handler" jdbcType="VARCHAR"/>
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <result property="subwayId" column="subway_id" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="INTEGER"/>
+        <result property="cleanProgress" column="clean_progress" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="endTime" column="end_time" jdbcType="TIMESTAMP"/>
+        <result property="deleted" column="deleted" jdbcType="INTEGER"/>
+        <result property="handler" column="handler" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="subwayCleanHistoryWithPartAndSubwayInfoResultMap" type="subwayCleanHistoryWithPartAndSubwayInfoVO">
+        <id column="sch_id"/>
+        <association property="subway" columnPrefix="s_" javaType="subwayMajorDTO"/>
+        <association property="subwayCleanHistory" columnPrefix="sch_"/>
+        <association property="parts" javaType="arraylist" column="sch_id"
+                     select="edu.yangao.mapper.PartCleanHistoryMapper.selectPartsBySubwayCleanHistoryId"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,subway_id,status,
+        id
+        ,subway_id,status,
         clean_progress,create_time,end_time,
         deleted,handler
     </sql>
+    <select id="selectAllWithSubwayAndPartsByCondition"
+            resultMap="subwayCleanHistoryWithPartAndSubwayInfoResultMap">
+        select sch.id sch_id, sch.pattern sch_pattern, sch.status sch_status, sch.clean_progress sch_clean_progress,
+        sch.create_time sch_create_time, sch.end_time sch_end_time, s.id s_id, s.name s_name, s.subway_type_id
+        s_subway_type_id
+        from subway_clean_history sch
+        join subway s on sch.subway_id = s.id
+        <if test="condition.id != null and condition.id > 0">
+            where sch.id = #{condition.id} and sch.deleted = 0
+        </if>
+        <if test="condition.id == null or condition.id &lt;= 0">
+            <where>
+                <if test="condition.status != null">
+                    and sch.status = #{condition.status}
+                </if>
+                <if test="condition.createTimeStart != null and condition.createTimeEnd != null and condition.createTimeStart &lt; condition.createTimeEnd">
+                    and sch.create_time between #{condition.createTimeStart} and #{condition.createTimeEnd}
+                </if>
+                <if test="condition.subwayName != null and !condition.subwayName.isBlank()">
+                    and s.name = #{condition.subwayName}
+                </if>
+                and sch.deleted = 0
+            </where>
+        </if>
+    </select>
 </mapper>

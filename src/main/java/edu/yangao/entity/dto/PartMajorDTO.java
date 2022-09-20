@@ -1,5 +1,6 @@
 package edu.yangao.entity.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import edu.yangao.entity.enums.SideEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ import javax.validation.constraints.Pattern;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "零件信息 主要属性 传输类")
 public class PartMajorDTO {
 

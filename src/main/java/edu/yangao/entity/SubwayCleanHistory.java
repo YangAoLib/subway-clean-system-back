@@ -5,8 +5,10 @@ import edu.yangao.entity.enums.CleanStateEnum;
 import edu.yangao.entity.enums.DeletedEnum;
 import edu.yangao.entity.enums.PatternEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Range;
 
@@ -24,6 +26,8 @@ import java.util.Date;
 @TableName(value = "subway_clean_history")
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Schema(description = "地铁清理历史记录")
 public class SubwayCleanHistory implements Serializable {
     /**
